@@ -1,0 +1,28 @@
+Page d'affichage des paris foot :
+
+
+<table border="1">
+  <tr>
+    <th>Date</th>
+    <th>Heure</th>
+    <th>Equipe 1</th>
+    <th>Côte</th>
+    <th>Nul</th>
+    <th>Côte</th>
+    <th>Equipe 2</th>
+    <th></th>
+  </tr>
+ 
+<% @matchs.each do |match| %>
+  <tr>
+    <td><%= match.date %></td>
+    <td><%= match.time %></td>
+    <td><%= match.team1 %></td>
+    <td><%= match.odd1 %></td>
+    <td><%= match.oddNul %></td>
+    <td><%= match.odd2 %></td>
+    <td><%= match.team2 %></td>
+    <td><%= link_to 'Parier', match.name %></td>
+  </tr>
+<% end %>
+</table>
