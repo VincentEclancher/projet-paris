@@ -1,0 +1,43 @@
+<h1><%= @sportName %></h1>
+
+<% @events.each do |event| %>
+    <h2>Evénement : <%= event.name %></h2>
+
+      <% matchs = event.matchs %> 
+      <% matchs.each do |match| %>
+
+        <%= match.name %><br />
+        <table border="1">  
+        <% if match.typeOfBet.match("Win") || match.typeOfBet.match("Rwi") %>
+        <% teamsAndOdds = match.teamsAndOdds.sort {|team,odd| team[1].to_f <=> odd[1].to_f } %>
+          <% teamsAndOdds.each do |teamAndOdd| %>
+            <% Rails.logger.debug(teamAndOdd) %>
+            <tr><td><%= teamAndOdd[0] %></td><td><%= teamAndOdd[1] %></td></tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <% i = 0 %>
+            <% match.teamsAndOdds.each do |teamAndOdd| %>
+              <% if i == 0 %> 
+                <td><%= teamAndOdd[0] %></td><td><%= teamAndOdd[1] %></td>
+              <% end %>
+              <% i = i +1 %>
+            <% end %> 
+            <% if match.oddNul %>
+              <td><%= match.oddNul %></td>
+            <% end %>
+            <% i = 0 %>
+            <% match.teamsAndOdds.each do |teamAndOdd| %>
+              <% if i == 1 %> 
+                <td><%= teamAndOdd[0] %></td><td><%= teamAndOdd[1] %></td>
+              <% end %>
+              <% i = i +1 %>
+            <% end %> 
+          </tr>          
+        <% end %>
+       </table>
+      <% end %>
+
+          
+
+<% end %>

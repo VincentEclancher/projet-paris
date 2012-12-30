@@ -1,8 +1,9 @@
 class ParisController < ApplicationController
-  def get_paris_foot
+  def show
   	Rails.logger.debug('===========> IN CONTROLLER paris controller')
-    
-	# matchs = Robot.last_matchs
- #    render :json => matchs
+  	Rails.logger.debug('Sport = ' + params[:name])
+
+  	@sportName = params[:name]
+  	@events = Robot.get_events(params[:name])
   end
 end

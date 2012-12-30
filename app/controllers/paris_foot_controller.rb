@@ -3,7 +3,7 @@ class ParisFootController < ApplicationController
   	Rails.logger.debug('===========> IN PARIS FOOT CONTROLLER')
   	Rails.logger.debug('=======================================')
     
-	@matchs = Robot.last_matchs
-	@matchs
+	@events = Robot.last_matchs
+	@events
   end
 end

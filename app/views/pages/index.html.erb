@@ -1,7 +1,11 @@
 Paris sportifs
 
 <br>
-<%= link_to 'Paris foot', paris_foot_path %><br>
+
+<% @sports.each do |sport| %>
+	<%= link_to sport, 'paris/' + sport %> <br />
+<% end %>
+
 ============================================
 <br />
 <%= yield %>
