@@ -1,0 +1,42 @@
+<a href="/paris/<%= @sportName %>">Retour à la page <%= @sportName %></a>
+
+<% if @bet.id != -1 %>
+	<h1>Placer un pari sur le <%= @sportName %></h1>
+
+	<h2>Evénement : <%= @bet.eventName %></h2>
+
+	<h3>Match : <%= @bet.matchName %></h3>
+	Le <%= @bet.matchDate %> à <%= @bet.matchTime %><br /><br />
+
+	<%= @bet.betType %><br />
+
+	Votre pronostic : <%= @bet.teamName %> || <%= @bet.odd %>
+
+	<form>
+	Votre mise : <input id="mise" type="text" name="mise" value="1.00" onkeyup="calculatePossibleWinnings()"><br />
+	Gains possibles : <span id="possible_winnings">NaN</span><br />
+	<input type="submit" value="Soumettre">
+	</form>
+<% else %>
+	PAGE D'ERREUR A AFFICHER ICI !!!
+<% end %>
+
+<script language="javascript"> 
+	function calculatePossibleWinnings() {
+		var value = document.getElementById("mise").value;
+		if( !isNaN(value) ) {
+			var gains = value * <%= @bet.odd %>;
+			document.getElementById("possible_winnings").innerHTML = gains + " €";
+		}
+		else {
+			document.getElementById("possible_winnings").innerHTML = "Mise incorrecte ! La mise doit être un nombre";
+		}
+	}
+
+	window.onload = function()
+	{
+		var value = document.getElementById("mise").value;
+		var gains = value * <%= @bet.odd %>;
+		document.getElementById("possible_winnings").innerHTML = gains + " €";
+	};
+</script> 

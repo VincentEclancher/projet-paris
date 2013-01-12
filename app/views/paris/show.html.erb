@@ -1,3 +1,5 @@
+<a href="/">Tous les sports</a>
+
 <h1><%= @sportName %></h1>
 
 <% @events.each do |event| %>
@@ -9,27 +11,26 @@
         <%= match.name %><br />
         <table border="1">  
         <% if match.typeOfBet.match("Win") || match.typeOfBet.match("Rwi") %>
-        <% teamsAndOdds = match.teamsAndOdds.sort {|team,odd| team[1].to_f <=> odd[1].to_f } %>
+        <% teamsAndOdds = match.teamsAndOdds.sort {|odd1,odd2| odd1[1].odd.to_f <=> odd2[1].odd.to_f } %>
           <% teamsAndOdds.each do |teamAndOdd| %>
-            <% Rails.logger.debug(teamAndOdd) %>
-            <tr><td><%= teamAndOdd[0] %></td><td><%= teamAndOdd[1] %></td></tr>
+            <tr><td><%= teamAndOdd[0] %></td><td><a href="<%= request.fullpath %>/bet?id=<%= teamAndOdd[1].id %>"><%= teamAndOdd[1].odd %></a></td></tr>
           <% end %>
         <% else %>
           <tr>
             <% i = 0 %>
             <% match.teamsAndOdds.each do |teamAndOdd| %>
               <% if i == 0 %> 
-                <td><%= teamAndOdd[0] %></td><td><%= teamAndOdd[1] %></td>
+                <td><%= teamAndOdd[0] %></td><td><a href="<%= request.fullpath %>/bet?id=<%= teamAndOdd[1].id %>"><%= teamAndOdd[1].odd %></a></td>
               <% end %>
               <% i = i +1 %>
             <% end %> 
             <% if match.oddNul %>
-              <td><%= match.oddNul %></td>
+              <td><a href="<%= request.fullpath %>/bet?id=<%= match.oddNul.id %>"><%= match.oddNul.odd %></a></td>
             <% end %>
             <% i = 0 %>
             <% match.teamsAndOdds.each do |teamAndOdd| %>
               <% if i == 1 %> 
-                <td><%= teamAndOdd[0] %></td><td><%= teamAndOdd[1] %></td>
+                <td><%= teamAndOdd[0] %></td><td><a href="<%= request.fullpath %>/bet?id=<%= teamAndOdd[1].id %>"><%= teamAndOdd[1].odd %></a></td>
               <% end %>
               <% i = i +1 %>
             <% end %> 
@@ -37,7 +38,4 @@
         <% end %>
        </table>
       <% end %>
-
-          
-
 <% end %>
