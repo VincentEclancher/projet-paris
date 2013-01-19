@@ -7,6 +7,11 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+<% if user_signed_in? %>
+	<p>Bienvenue : <%= current_user.email %> - <%= link_to "Se déconnecter", destroy_user_session_path, :method => :delete %></p>
+<% else %>
+	<p><%= link_to "Se connecter", new_user_session_path %></p>
+<% end %>
 
 <%= yield %>
 

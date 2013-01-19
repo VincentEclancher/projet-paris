@@ -1,5 +1,5 @@
 class BetController < ApplicationController
-
+before_filter :authenticate_user!
   def show
     Rails.logger.debug('IN BET CONTROLLER !')
 
