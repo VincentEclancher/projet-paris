@@ -5,11 +5,12 @@
 <div class="accordion" id="accordion2">
   <% @numberCollapse = 0 %>
 
+  <div class="accordion-group" >
+    
   <% @events.each do |event| %>
   
   <% @nameCollapse = "collapse" + @numberCollapse.to_s %>
   
-  <div class="accordion-group" >
     <div class="accordion-heading">
       <a class="accordion-toggle " data-toggle="collapse" data-parent="#accordion2" href="#<%=@nameCollapse%>" >
         <h3><%= event.name %></h3>

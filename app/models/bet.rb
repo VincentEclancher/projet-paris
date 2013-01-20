@@ -1,3 +1,5 @@
-class Bet
-  attr_accessor :id, :eventName, :matchName, :betType, :teamName, :odd, :matchDate, :matchTime
+class Bet < ActiveRecord::Base
+	set_table_name "bets"
+	set_primary_key "bet_id"
 end
+
