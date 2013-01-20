@@ -12,19 +12,16 @@
 	<% @dateFinale = Date.new(@anneeMatch.to_i,@moisMatch.to_i,@jourMatch.to_i) %>
 
 	<h3>Match : <%= @bet.matchName %></h3>
-	Le <%= @dateFinale.strftime('%A %d %B %Y') %> à <%= @heureM %>h<% @minuteM %><br /><br />
+	<h4>Le <%= @dateFinale.strftime('%A %d %B %Y') %> à <%= @heureM %>h<% @minuteM %></h4><br /><br />
 
-	
-
-	Votre pronostic : <%= @bet.teamName %> (<%= @bet.odd %>)
-
-	<form class="form">
-		Gains possibles : <span id="possible_winnings">NaN</span><br />
-		Votre mise : <br />
+	<form >
+		<legend>Votre pronostic : <%= @bet.teamName %> (<%= @bet.odd %>)</legend>
+		
 		<div class="input-append">
 		  <input class="span2" id="appendedInputButton" type="text" name="mise" value="1.00" onkeyup="calculatePossibleWinnings()" placeholder="Votre mise">
 		  <button class="btn btn-primary" type="submit">Miser</button>
 		</div>
+		Gains possibles : <span id="possible_winnings">NaN</span><br />
 	</form>
 <% else %>
 	PAGE D'ERREUR A AFFICHER ICI !!!
