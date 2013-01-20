@@ -1,16 +1,22 @@
 <a href="/paris/<%= @sportName %>">Retour à la page <%= @sportName %></a>
 
 <% if @bet.id != -1 %>
-	<h1>Placer un pari sur le <%= @sportName %></h1>
-
-	<h2>Evénement : <%= @bet.eventName %></h2>
+	<h2><%= @bet.eventName %></h2>
+	<% @dateMatch = @bet.matchDate.split("-")%>
+	<% @heureMatch = @bet.matchTime.split(":") %>
+	<% @heureM = @heureMatch[0] %>
+	<% @minuteM = @heureMatch[1] %>
+	<% @anneeMatch = @dateMatch[0]%>
+	<% @moisMatch = @dateMatch[1]%>
+	<% @jourMatch = @dateMatch[2]%>
+	<% @dateFinale = Date.new(@anneeMatch.to_i,@moisMatch.to_i,@jourMatch.to_i) %>
 
 	<h3>Match : <%= @bet.matchName %></h3>
-	Le <%= @bet.matchDate %> à <%= @bet.matchTime %><br /><br />
+	Le <%= @dateFinale.strftime('%A %d %B %Y') %> à <%= @heureM %>h<% @minuteM %><br /><br />
 
-	<%= @bet.betType %><br />
+	
 
-	Votre pronostic : <%= @bet.teamName %> || <%= @bet.odd %>
+	Votre pronostic : <%= @bet.teamName %> (<%= @bet.odd %>)
 
 	<form class="form">
 		Gains possibles : <span id="possible_winnings">NaN</span><br />
