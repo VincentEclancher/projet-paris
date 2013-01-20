@@ -3,21 +3,22 @@
 <head>
   <title>ProjetParis | <%= yield(:title) %></title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= stylesheet_link_tag "boostrap.css" %>
   <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag "bootstrap.js" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-	<div id="page">
-		<div id="header">
+	
 			<% if user_signed_in? %>
 				<p>Bienvenue : <%= current_user.username %> - <%= link_to "Mon compte", :edit %> - <%= link_to "Se déconnecter", destroy_user_session_path, :method => :delete %></p>
 			<% else %>
 				<p><%= link_to "Se connecter", new_user_session_path %></p>
 			<% end %>
-		</div>
-		<div id="content">	
+		
+		
 			<%= yield %>
-		</div>
+		
 		<div id="footer">
 			<p>Copyright 2013 - D. Beltrami - V. Eclancher - O. Revial</p>
 		</div>

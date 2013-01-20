@@ -11,37 +11,38 @@ class Robot
     i.get_sports
   end
 
-  def self.get_bet(sportName, betId)
+  def self.get_bet(betId)
     i = self.new
-    i.read_xml
+    i.fetch_xml
 
-    i.parse_bet(sportName, betId)
+    i.parse_bet(betId)
   end
 
-  def read_xml
+  def fetch_xml
     @url = "http://xml.betclick.com/odds_fr.xml"
 
-    cache_raw = Rails.cache.read('raw_xml')
+    cache = Rails.cache.read('raw')
 
-    if not cache_raw
-        Rails.logger.debug('===========> HTTP CALL')
-        # Rails.cache.write('raw_xml', @response, :expires_in => 1000.minutes)
+    if cache
+        Rails.logger.debug('===========> CACHE Exists, use it')
+        @body = cache
+    else
+        Rails.logger.debug('===========> CACHE does not exist, fetch it from URL')
+        @response = HTTParty.get(@url) # BLOCKING
+        Rails.cache.write('raw', @response.body.to_s, :expires_in => 60.minutes)
+        @body = @response.body.to_s
     end
-
-    # @response = HTTParty.get(@url) # BLOCKING
-    # @body = @response.body
-    @body = File.read(Rails.root.join('sports.xml'))
   end
 
   def get_sports
-    read_xml
+    fetch_xml
 
     self.parse_sports
   end
 
   def fetch(sport)
     @sportName = sport
-    read_xml
+    fetch_xml
     
     self.parse
   end
@@ -60,49 +61,65 @@ class Robot
     
   end
 
-  def parse_bet(sport, betId)
-    Rails.logger.debug('In parse BET method ! ' + betId)
+  def parse_bet(oddId)
+    Rails.logger.debug('In parse BET method ! ' + oddId)
     Rails.logger.debug('----------------------------------')
 
     # cache = Rails.cache.read('raw_xml')
     doc = Nokogiri::XML(@body)
 
+
+
+    # theBet = Bet.new
+    # theBet.id = -1
+
+    # doc.xpath("//sports//sport[@name='#{sport}']//choice[@id='#{betId}']").each do |bet|        
+    #     Rails.logger.debug('>> Found something !')
+    #     Rails.logger.debug('>> Bet odd : ' + bet['odd'])
+    #     Rails.logger.debug('>> Parent id : ' + bet.parent()['name'])
+
+    #     match = bet.parent().parent().parent()
+    #     matchString = match['name']
+    #     event = match.parent()
+
+    #     choiceName = bet["name"]
+    #     if choiceName.match("%1%")     ## Equipe 1 d'un match de type "Résultat" (1-2 ou 1-Nul-2)
+    #         theBet.teamName = matchString.split(%r{\s-\s})[0]
+    #     elsif choiceName.match("%2%")   ## Equipe 2 d'un match de type "Résultat" (1-2 ou 1-Nul-2)
+    #         theBet.teamName = matchString.split(%r{\s-\s})[1]
+    #     elsif choiceName.match("Nul")   ## Côte du match nul pour un match de type "Résultat" (1-Nul-2)
+    #         theBet.teamName = "Nul"
+    #     else    ##Tout autre type de paris (ex win)
+    #         theBet.teamName = bet['name']
+    #     end
+    #     betCode = bet.parent()['code']
+
+    #     theBet.id           = betId
+    #     theBet.odd          = bet['odd']
+    #     theBet.matchName    = match['name']
+    #     theBet.eventName    = event['name']
+    #     theBet.betType      = betCode.split(%r{_})[1]
+    #     theBet.matchDate    = match['start_date'].split("T")[0]
+    #     theBet.matchTime    = match['start_date'].split("T")[1]
+    # end
+    returnValues = []
+
     theBet = Bet.new
-    theBet.id = -1
+    theOdd = Odd.new
+    if Odd.exists?(oddId)
+        theOdd = Odd.find(oddId)
 
-    doc.xpath("//sports//sport[@name='#{sport}']//choice[@id='#{betId}']").each do |bet|        
-        Rails.logger.debug('>> Found something !')
-        Rails.logger.debug('>> Bet odd : ' + bet['odd'])
-        Rails.logger.debug('>> Parent id : ' + bet.parent()['name'])
-
-        match = bet.parent().parent().parent()
-        matchString = match['name']
-        event = match.parent()
-
-        choiceName = bet["name"]
-        if choiceName.match("%1%")     ## Equipe 1 d'un match de type "Résultat" (1-2 ou 1-Nul-2)
-            theBet.teamName = matchString.split(%r{\s-\s})[0]
-        elsif choiceName.match("%2%")   ## Equipe 2 d'un match de type "Résultat" (1-2 ou 1-Nul-2)
-            theBet.teamName = matchString.split(%r{\s-\s})[1]
-        elsif choiceName.match("Nul")   ## Côte du match nul pour un match de type "Résultat" (1-Nul-2)
-            theBet.teamName = "Nul"
-        else    ##Tout autre type de paris (ex win)
-            theBet.teamName = bet['name']
+        if Bet.exists?(theOdd.bet_id)
+            theBet = Bet.find(theOdd.bet_id)
         end
-        betCode = bet.parent()['code']
-
-        theBet.id           = betId
-        theBet.odd          = bet['odd']
-        theBet.matchName    = match['name']
-        theBet.eventName    = event['name']
-        theBet.betType      = betCode.split(%r{_})[1]
-        theBet.matchDate    = match['start_date'].split("T")[0]
-        theBet.matchTime    = match['start_date'].split("T")[1]
     end
+
+    returnValues.push(theBet)
+    returnValues.push(theOdd)
 
     Rails.logger.debug('----------------------------------')
 
-    return theBet
+    return returnValues
   end
 
   def parse
@@ -119,7 +136,6 @@ class Robot
     betMr3Regexp = /.*Mr3/
 
     doc.xpath("//sports//sport[@name='#{@sportName}']//event").each do |event|
-        Rails.logger.debug("Event name = " + event['name'])
         @theEvent = Event.new
         @theEvent.matchs = []
         @theEvent.name = event['name']
@@ -128,8 +144,7 @@ class Robot
             @theEvent.start_date = event['start_date']
         end
 
-        event.css("match").each do |match|
-
+        event.css("match").each do |match| 
             hasBet = false
 
             theMatch = Match.new
@@ -139,6 +154,15 @@ class Robot
             theMatch.id = match['id']
             theMatch.date = match['start_date'].split("T")[0]
             theMatch.time = match['start_date'].split("T")[1]
+            endDate = match['end_date']
+            if endDate
+                endDate = endDate.split("T")[0]
+            end
+            
+            endTime = match['end_date']
+            if endTime
+                endDate = endDate.split("T")[1]
+            end
 
             matchName = match['name']
 
@@ -146,13 +170,25 @@ class Robot
 
                 codeName = bet["code"]
 
-                #Rails.logger.debug("Code = " + codeName)
-
                 if codeName.match(betTypeRegexp) && !hasBet
+
+                    theBet = Bet.new 
 
                     hasBet = true
 
                     codeNameShort = codeName.split(%r{_})[1]
+
+                    #On prépare l'objet "bet" qui sera inséré dans la base de données
+                    theBet.bet_id = bet["id"]
+                    theBet.type_of_bet = codeNameShort
+                    theBet.match_name = theMatch.name
+                    theBet.match_id = theMatch.id
+                    theBet.start_date = theMatch.date
+                    theBet.start_time = theMatch.time
+                    theBet.end_date = endDate
+                    theBet.end_time = endTime
+                    theBet.event_name = @theEvent.name
+                    theBet.sport_name = @sportName
 
                     theMatch.teamsAndOdds = Hash.new
 
@@ -161,26 +197,48 @@ class Robot
                     bet.css("choice").each do |choice|
 
                         theOdd = Odd.new
-                        theOdd.id = choice["id"]
-                        theOdd.name = choice["name"]
+                        theOdd.odd_id = choice["id"]
+                        theOdd.bet_id = theBet.bet_id
                         theOdd.odd = choice["odd"]
 
                         choiceName = choice["name"]
                         if choiceName.match("%1%")     ## Equipe 1 d'un match de type "Résultat" (1-2 ou 1-Nul-2)
                             team1 = matchName.split(%r{\s-\s})[0]
+                            theOdd.name = team1
                             theMatch.teamsAndOdds[team1] = theOdd
                         elsif choiceName.match("%2%")   ## Equipe 2 d'un match de type "Résultat" (1-2 ou 1-Nul-2)
                             team2 = matchName.split(%r{\s-\s})[1]
+                            theOdd.name = team2
                             theMatch.teamsAndOdds[team2] = theOdd
                         elsif choiceName.match("Nul")   ## Côte du match nul pour un match de type "Résultat" (1-Nul-2)
+                            theOdd.name = choiceName
                             theMatch.oddNul = theOdd
                         else    ##Tout autre type de paris (ex win)
+                            theOdd.name = choiceName
                             theMatch.teamsAndOdds[choiceName] = theOdd
                         end
+                        if not theOdd.name
+                            theOdd.name = "Name not found !"
+                        end 
+                        if Odd.exists?(theOdd.odd_id)
+                            existingOdd = Odd.find(theOdd.odd_id)
+                            existingOdd.odd = theOdd.odd
+                        else
+                            Rails.logger.debug('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+                            Rails.logger.debug('----------------------------------------------------')
+                            Rails.logger.debug('Bet id : ' + theBet.bet_id.to_s + ' - ' +  matchName)
+                            Rails.logger.debug('----------------------------------------------------')
+                            theOdd.save
+                        end
+                    end
+                    if not Bet.exists?(theBet.bet_id)
+                        theBet.save
                     end
                 end
             end
-            @theEvent.matchs.push(theMatch)
+            if hasBet
+                @theEvent.matchs.push(theMatch)
+            end
         end
         @events.push(@theEvent)
     end
