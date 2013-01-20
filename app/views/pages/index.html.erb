@@ -1,11 +1,10 @@
-Paris sportifs
+<h1>Paris sportifs</h1>
 
 <br>
 
+<ul>
 <% @sports.each do |sport| %>
-	<%= link_to sport, 'paris/' + sport %> <br />
+	<li><%= link_to sport, 'paris/' + sport %></li>
 <% end %>
-
-============================================
-<br />
+</ul>
 <%= yield %>
