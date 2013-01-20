@@ -13,35 +13,36 @@ class Robot
 
   def self.get_bet(sportName, betId)
     i = self.new
-    i.read_xml
+    i.fetch_xml
 
     i.parse_bet(sportName, betId)
   end
 
-  def read_xml
+  def fetch_xml
     @url = "http://xml.betclick.com/odds_fr.xml"
 
-    cache_raw = Rails.cache.read('raw_xml')
+    cache = Rails.cache.read('raw')
 
-    if not cache_raw
-        Rails.logger.debug('===========> HTTP CALL')
-        # Rails.cache.write('raw_xml', @response, :expires_in => 1000.minutes)
+    if cache
+        Rails.logger.debug('===========> CACHE Exists, use it')
+        @body = cache
+    else
+        Rails.logger.debug('===========> CACHE does not exist, fetch it from URL')
+        @response = HTTParty.get(@url) # BLOCKING
+        Rails.cache.write('raw', @response.body.to_s, :expires_in => 60.minutes)
+        @body = @response.body.to_s
     end
-
-    # @response = HTTParty.get(@url) # BLOCKING
-    # @body = @response.body
-    @body = File.read(Rails.root.join('sports.xml'))
   end
 
   def get_sports
-    read_xml
+    fetch_xml
 
     self.parse_sports
   end
 
   def fetch(sport)
     @sportName = sport
-    read_xml
+    fetch_xml
     
     self.parse
   end
@@ -119,7 +120,6 @@ class Robot
     betMr3Regexp = /.*Mr3/
 
     doc.xpath("//sports//sport[@name='#{@sportName}']//event").each do |event|
-        Rails.logger.debug("Event name = " + event['name'])
         @theEvent = Event.new
         @theEvent.matchs = []
         @theEvent.name = event['name']
@@ -129,7 +129,6 @@ class Robot
         end
 
         event.css("match").each do |match|
-
             hasBet = false
 
             theMatch = Match.new
@@ -180,7 +179,9 @@ class Robot
                     end
                 end
             end
-            @theEvent.matchs.push(theMatch)
+            if hasBet
+                @theEvent.matchs.push(theMatch)
+            end
         end
         @events.push(@theEvent)
     end
