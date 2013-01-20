@@ -7,14 +7,19 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-	<header>
-		<% if user_signed_in? %>
-			<p>Bienvenue : <%= current_user.email %> - <%= link_to "Mon compte", 'users/edit' %> - <%= link_to "Se déconnecter", destroy_user_session_path, :method => :delete %></p>
-		<% else %>
-			<p><%= link_to "Se connecter", new_user_session_path %></p>
-		<% end %>
-	</header>
-<%= yield %>
-
+	<div id="page">
+		<div id="header">
+			<% if user_signed_in? %>
+				<p>Bienvenue : <%= current_user.email %> - <%= link_to "Mon compte", 'users/edit' %> - <%= link_to "Se déconnecter", destroy_user_session_path, :method => :delete %></p>
+			<% else %>
+				<p><%= link_to "Se connecter", new_user_session_path %></p>
+			<% end %>
+		</div>
+		<div id="content">	
+			<%= yield %>
+		</div>
+		<div id="footer">
+			<p>Copyright 2013 - D. Beltrami - V. Eclancher - O. Revial</p>
+		</div>
 </body>
 </html>
