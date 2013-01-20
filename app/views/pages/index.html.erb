@@ -1,10 +1,9 @@
-<h1>Paris sportifs</h1>
 
-<br>
+<% provide(:title, 'Bienvenue sur l\'application de paris fictifs en ligne') %>
+<h2>Paris sportifs</h2>
 
-<ul>
+<br/>
+
 <% @sports.each do |sport| %>
-	<li><%= link_to sport, 'paris/' + sport %></li>
+		<%= link_to sport, 'paris/' + sport %> <br />
 <% end %>
-</ul>
-<%= yield %>
