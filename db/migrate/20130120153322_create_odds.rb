@@ -4,6 +4,7 @@ class CreateOdds < ActiveRecord::Migration
       t.integer :odd_id, :null => false
       t.integer :bet_id, :null => false
       t.string :name, :null => false
+      t.string :init_name, :null => false
       t.float :odd, :null => false
 
       t.timestamps

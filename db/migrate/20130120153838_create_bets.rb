@@ -8,9 +8,7 @@ class CreateBets < ActiveRecord::Migration
       t.string :sport_name, :null => false
       t.string :type_of_bet
       t.date :start_date
-      t.date :start_time
-      t.date :end_date
-      t.date :end_time
+      t.time :start_time
 
       t.timestamps
     end
