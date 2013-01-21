@@ -20,13 +20,14 @@
       <div class="accordion-inner">
         <% matchs = event.matchs %> 
         <% matchs.each do |match| %>
-          Le <%= match.date %> à <%= match.time %>
+          <%= match.date %>
+           à <%= match.time %>
           <table class="table-bordered">
           <% if match.typeOfBet.match("Win") || match.typeOfBet.match("Rwi") %>
           <% teamsAndOdds = match.teamsAndOdds.sort {|odd1,odd2| odd1[1].odd.to_f <=> odd2[1].odd.to_f } %>
             <% teamsAndOdds.each do |teamAndOdd| %>
 
-              <tr><td width = "200px" align="center"><%= teamAndOdd[0] %></td><td width = "100px" align="center"><a href="<%= request.fullpath %>/bet?id=<%= teamAndOdd[1].id %>"><%= teamAndOdd[1].odd %></a></td></tr>
+              <tr><td width = "200px" align="center"><%= teamAndOdd[0] %></td><td width = "100px" align="center" onclick="location.href='<%= request.fullpath %>/bet?id=<%= teamAndOdd[1].id %>'"><%= teamAndOdd[1].odd %></td></tr>
             <% end %>
           <% else %>
           
@@ -53,13 +54,13 @@
                 <th width = "100px"><%= @Visiteur[0] %></th>
               </thead>
               <tbody align="center">
-                <td><a href="<%= request.fullpath %>/bet?id=<%= @Receveur[1].id %>"><%= @Receveur[1].odd %></a></td>
+                <td onclick="location.href='<%= request.fullpath %>/bet?id=<%= @Receveur[1].id %>'"><%= @Receveur[1].odd %></td>
                 <% if @matchNul %>
-                  <td><a href="<%= request.fullpath %>/bet?id=<%= @matchNul.id %>"><%= @matchNul.odd %></a></td>
+                  <td onclick="location.href='<%= request.fullpath %>/bet?id=<%= @matchNul.id %>'"><%= @matchNul.odd %></td>
                 <% else %>
                   <td>/</td>
                 <% end %>
-                <td><a href="<%= request.fullpath %>/bet?id=<%= @Visiteur[1].id %>"><%= @Visiteur[1].odd %></a></td>
+                <td onclick="location.href='<%= request.fullpath %>/bet?id=<%= @Visiteur[1].id %>'"><%= @Visiteur[1].odd %></td>
               </tbody>
               <br/>       
           <% end %>
