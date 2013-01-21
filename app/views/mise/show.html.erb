@@ -1,0 +1,14 @@
+<a href="/paris/<%= @sportName %>">Retour à la page <%= @sportName %></a>
+
+<% if @resultatMise == -1 %>
+	<h2>Votre paris n'est pas validé</h2>
+	<p>Vous n'avez pas assez d'argent sur votre compte !</p>
+<% else %>
+	<% if @resultatMise == 0 %>
+		<h2>Votre paris n'est pas validé</h2>
+		<p>Votre mise doit être supérieure à 0.50€ !</p>
+	<% else %>
+		<h2>Votre paris est validé</h2>
+		<p>Bonne chance ! Il vous reste <%= current_user.credit %>€ sur votre compte.</p>
+	<% end %>
+<% end %>
