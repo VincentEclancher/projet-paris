@@ -52,7 +52,7 @@ class Robot
     eventsNames = []
 
     #On récupère tous les différents évènements correspondants au sport
-    betsObjects = Bet.select(:event_name).where(:sport_name => sport).uniq
+    betsObjects = Bet.select(:event_name).where(:is_opened => true, :sport_name => sport).uniq
     betsObjects.each do |event|
         eventsNames.push(event.event_name)
     end
@@ -63,7 +63,7 @@ class Robot
         theEvent.name = eventName
         theEvent.matchs = []
 
-        bets = Bet.select(:match_id).where(:sport_name => sport, :event_name => eventName)
+        bets = Bet.select(:match_id).where(:is_opened => true, :sport_name => sport, :event_name => eventName)
         matchsIds = []
         bets.each do |matchId|
             matchsIds.push(matchId.match_id)
@@ -76,14 +76,12 @@ class Robot
             theMatch = Match.new
             theMatch.id = matchId
 
-            bets = Bet.where(:sport_name => sport, :event_name => eventName, :match_id => matchId)
+            bets = Bet.where(:is_opened => true, :sport_name => sport, :event_name => eventName, :match_id => matchId)
             theMatch.name = bets.first.match_name
-            date = bets.first.start_date.to_s
-            time = bets.first.start_time.to_s
-            timeInter = time.split(" ")[1]
+            date = bets.first.start_date
 
-            theMatch.date = date.split("-")[2] + "/" + date.split("-")[1] + "/" + date.split("-")[0] 
-            theMatch.time = timeInter.split(":")[0] + "h" + timeInter.split(":")[1]
+            theMatch.date = date.strftime("%d/%m/%Y")
+            theMatch.time = date.strftime("%Hh%M")
 
             if !hasDateAndTime
                 theEvent.start_date = theMatch.date

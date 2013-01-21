@@ -1,5 +1,5 @@
 class Parser
-	def self.parse_xml()
+	def self.parse_xml
 		i = self.new
 		puts "In parse_xml method"
 
@@ -72,7 +72,6 @@ class Parser
         event.css("match").each do |match| 
             hasBet = false
 
-
             matchName = match['name']
 
             match.css("bets bet").each do |bet|
@@ -94,8 +93,7 @@ class Parser
                     theBet.event_name = event['name']
                     theBet.match_name = match['name']
                     theBet.match_id = match['id']
-                    theBet.start_date = match['start_date'].split("T")[0]
-                    theBet.start_time = match['start_date'].split("T")[1]
+                    theBet.start_date = match['start_date']
 
                     bet.css("choice").each do |choice|
 

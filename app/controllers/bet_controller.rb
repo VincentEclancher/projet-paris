@@ -9,6 +9,7 @@ before_filter :authenticate_user!
     Rails.logger.debug('----------------------------------')
 
 	returnValues = Robot.get_bet(params[:id])
+  @sportName = params[:sport]
 	@bet = returnValues[0]
 	@odd = returnValues[1]
 

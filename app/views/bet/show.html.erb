@@ -2,18 +2,12 @@
 
 <% if @bet.bet_id != -1 %>
 	<h2><%= @bet.event_name %></h2>
-	<% @dateMatch = @bet.start_date.to_s.split("-")%>
-	<% @heureMatch = @bet.start_time.to_s.split(":") %>
-	<% @heureM = @heureMatch[0] %>
-	<% @minuteM = @heureMatch[1] %>
-	<% @anneeMatch = @dateMatch[0]%>
-	<% @moisMatch = @dateMatch[1]%>
-	<% @jourMatch = @dateMatch[2]%>
-	<% @dateFinale = Date.new(@anneeMatch.to_i,@moisMatch.to_i,@jourMatch.to_i) %>
+	<% @dateMatch = @bet.start_date %>
 
 	<h3>Match : <%= @bet.match_name %></h3>
-	<h4>Le <%= @dateFinale.strftime('%A %d %B %Y') %> à <%= @heureM %>h<% @minuteM %></h4><br /><br />
-
+	<h4>Le <%= @dateMatch.strftime("%d/%m/%Y") %> à <%= @dateMatch.strftime("%Hh%M") %></h4><br /><br />
+	<%= @dateMatch.strftime("%Y-%m-%d %H:%M:%S") %> 
+	<%= @bet.start_date.to_s %> 
 	<form >
 		<legend>Votre pronostic : <%= @odd.name %> (<%= @odd.odd %>)</legend>
 		
