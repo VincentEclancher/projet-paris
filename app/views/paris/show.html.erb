@@ -20,8 +20,7 @@
       <div class="accordion-inner">
         <% matchs = event.matchs %> 
         <% matchs.each do |match| %>
-          <%= match.date %>
-           à <%= match.time %>
+          <%= match.date %> à <%= match.time %>
           <table class="table-bordered">
           <% if match.typeOfBet.match("Win") || match.typeOfBet.match("Rwi") %>
           <% teamsAndOdds = match.teamsAndOdds.sort {|odd1,odd2| odd1[1].odd.to_f <=> odd2[1].odd.to_f } %>
