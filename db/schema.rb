@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130120153838) do
+ActiveRecord::Schema.define(:version => 20130121220312) do
 
   create_table "accounts", :force => true do |t|
     t.string   "user_id"
@@ -20,24 +20,30 @@ ActiveRecord::Schema.define(:version => 20130120153838) do
   end
 
   create_table "bets", :id => false, :force => true do |t|
-    t.integer  "bet_id",      :null => false
-    t.string   "match_name",  :null => false
-    t.integer  "match_id",    :null => false
-    t.string   "event_name",  :null => false
-    t.string   "sport_name",  :null => false
+    t.integer  "bet_id",                        :null => false
+    t.string   "match_name",                    :null => false
+    t.integer  "match_id",                      :null => false
+    t.string   "event_name",                    :null => false
+    t.string   "sport_name",                    :null => false
     t.string   "type_of_bet"
     t.date     "start_date"
-    t.date     "start_time"
-    t.date     "end_date"
-    t.date     "end_time"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.boolean  "is_opened",   :default => true
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
+
+  create_table "bets_users", :id => false, :force => true do |t|
+    t.integer  "user_id",    :null => false
+    t.integer  "bet_id",     :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "odds", :id => false, :force => true do |t|
     t.integer  "odd_id",     :null => false
     t.integer  "bet_id",     :null => false
     t.string   "name",       :null => false
+    t.string   "init_name",  :null => false
     t.float    "odd",        :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false

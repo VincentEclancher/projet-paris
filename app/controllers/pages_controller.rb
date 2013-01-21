@@ -3,7 +3,7 @@ class PagesController < ApplicationController
   def index
     Rails.logger.debug('===========> HTTP INDEX')
 
-    @sports = Robot.sports
+    @sports = Robot.get_sports
     @sports
   end
 end
