@@ -7,7 +7,7 @@
 	<h3>Match : <%= @bet.match_name %></h3>
 	<h4>Le <%= @dateMatch.strftime("%d/%m/%Y") %> à <%= @dateMatch.strftime("%Hh%M") %></h4><br /><br />
 	
-	<%= form_tag(:mise, :method => "POST") do %>
+	<%= form_tag(:controller => 'mise', :method => "POST") do %>
 		<legend>Votre pronostic : <%= @odd.name %> (<%= @odd.odd %>)</legend>
 		<%= hidden_field_tag(:user_id, current_user.id) %>
 		<div class="input-append">

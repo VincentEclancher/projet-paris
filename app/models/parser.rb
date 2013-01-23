@@ -6,12 +6,18 @@ class Parser
 		#Fetch XML via url if necessary
 		i.fetch_xml
 		puts ">>>> Done : URL fetched"
-		
-		i.get_sports
-		puts ">>>> Done : Got all sports names"
-		
-		i.parse_sports
-		puts ">>>> Done : Parsed all sports and updated DB"
+
+		if i.is_parse_needed
+            puts ">>> Going to parse the new file now..."
+
+            i.get_sports
+            puts ">>>> Done : Got all sports names"
+            
+            i.parse_sports
+            puts ">>>> Done : Parsed all sports and updated DB"
+        else
+            puts ">>>> File did not changed, no need for parsing"
+        end
 	end
 
    	def parse_sports
@@ -37,6 +43,39 @@ class Parser
         @body = @response.body.to_s
     end
   end
+
+  def is_parse_needed
+
+    doc = Nokogiri::XML(@body)
+
+    xml_parse_date = doc.root()['file_date']
+    allFileParseDates = FileParse.all
+    if allFileParseDates    ## On compare la date stockee dans la BDD avec la date du fichier XML
+        if allFileParseDates.first
+            fileParse = allFileParseDates.first
+            puts "File date stockee : " + fileParse.last_parse_date.to_s
+            if(fileParse.last_parse_date != xml_parse_date)     ## On remplace la date et il faut parser
+                fileParse.last_parse_date = xml_parse_date
+                fileParse.save
+                return true
+            else
+                puts "Dates de fichiers identiques"
+                return false
+            end
+        else
+            fileParse = FileParse.new
+            fileParse.last_parse_date = xml_parse_date
+            fileParse.save
+            return true
+        end
+    else
+        fileParse = FileParse.new
+        fileParse.last_parse_date = xml_parse_date
+        fileParse.save
+        return true
+    end
+  end
+
 
   def get_sports
     @sports = []
@@ -94,6 +133,7 @@ class Parser
                     theBet.match_name = match['name']
                     theBet.match_id = match['id']
                     theBet.start_date = match['start_date']
+                    theBet.is_opened = true
 
                     bet.css("choice").each do |choice|
 

@@ -1,6 +1,8 @@
 class Mise
 	def self.controleMise(laMise, userId)
-		puts '------------------------------------------------------Mise : ' + laMise.to_s + '---------------------------------'
+		puts '------------------------------------------------------'
+		puts 'Mise : ' + laMise.to_s 
+		puts '---------------------------------'
 		user = User.find(userId)
 		case laMise
 		when laMise < 0.5
