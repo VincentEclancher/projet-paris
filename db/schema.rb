@@ -20,11 +20,11 @@ ActiveRecord::Schema.define(:version => 20130123230158) do
   end
 
   create_table "bets", :id => false, :force => true do |t|
-    t.integer  "bet_id",                        :null => false
-    t.string   "match_name",                    :null => false
-    t.integer  "match_id",                      :null => false
-    t.string   "event_name",                    :null => false
-    t.string   "sport_name",                    :null => false
+    t.integer  "bet_id",      :null => false
+    t.string   "match_name",  :null => false
+    t.integer  "match_id",    :null => false
+    t.string   "event_name",  :null => false
+    t.string   "sport_name",  :null => false
     t.string   "type_of_bet"
     t.date     "start_date"
     t.time     "start_time"
@@ -43,6 +43,12 @@ ActiveRecord::Schema.define(:version => 20130123230158) do
     t.float    "cote"
     t.float    "mise"
     t.float    "gain"
+  end
+
+  create_table "file_parsing", :id => false, :force => true do |t|
+    t.date     "last_parse_date", :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
   create_table "odds", :id => false, :force => true do |t|

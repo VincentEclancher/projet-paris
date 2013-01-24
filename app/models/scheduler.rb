@@ -4,7 +4,7 @@ class Scheduler
 		  	while true do
 			    p 'Should call the method parse_xml'
 			    Parser.parse_xml
-			    sleep 4000
+			    sleep 1800		## 30 minutes
 		  	end
 		end
 		parseThread.run
@@ -15,7 +15,7 @@ class Scheduler
 			while true do
 				p 'Should call the method clean_database'
 				Cleaner.clean_database
-				sleep 600
+				sleep 600		## 10 minutes 
 			end
 		end
 		cleanThread.run

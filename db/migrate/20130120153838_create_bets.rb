@@ -9,6 +9,7 @@ class CreateBets < ActiveRecord::Migration
       t.string :type_of_bet
       t.date :start_date
       t.time :start_time
+      t.boolean :is_opened
 
       t.timestamps
     end

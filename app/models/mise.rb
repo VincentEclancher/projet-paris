@@ -1,6 +1,5 @@
 class Mise
 	def self.controleMise(laMise, userId, betId)
-		puts '------------------------------------------------------Mise : ' + laMise + '---------------------------------'
 		user = User.find(userId)
 		puts '------------------------------------------------------Username : ' + user.username + '----------------------'
 		puts '------------------------------------------------------Username : ' + user.credit.to_s + '----------------------'
