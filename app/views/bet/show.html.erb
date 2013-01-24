@@ -7,15 +7,15 @@
 	<h3>Match : <%= @bet.match_name %></h3>
 	<h4>Le <%= @dateMatch.strftime("%d/%m/%Y") %> à <%= @dateMatch.strftime("%Hh%M") %></h4><br /><br />
 	
-	<%= form_tag(:controller => 'mise', :method => "POST") do %>
+	<%= form_tag('/mise')%>
 		<legend>Votre pronostic : <%= @odd.name %> (<%= @odd.odd %>)</legend>
 		<%= hidden_field_tag(:user_id, current_user.id) %>
+		<%= hidden_field_tag(:bet_id, @odd.odd_id) %>
 		<div class="input-append">
 		  <%= text_field_tag(:appendedInputButton, 1.0, :class => 'span2', :name => 'mise', :placeholder => 'Votre mise', :onkeyup => 'calculatePossibleWinnings()') %>
 		  <%= submit_tag("Miser", :class => 'btn btn-primary' ) %>
 		</div>
 		Gains possibles : <span id="possible_winnings">NaN</span>
-	<% end %>
 <% else %>
 	PAGE D'ERREUR A AFFICHER ICI !!!
 <% end %>

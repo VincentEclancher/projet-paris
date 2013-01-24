@@ -1,0 +1,19 @@
+<table style="border:1px solid;width:750px;margin:0 auto;">
+	<tr style="width:20%;">
+		<th>Match</th>
+		<th>Pronostique</th>
+		<th>Cote</th>
+		<th>Mise</th>
+		<th>Gains potentiels</th>
+	</tr>
+
+	<% @lesParis.each do |lePari| %>
+		<tr>
+			<td><%= lePari.match %></td>
+			<td><%= lePari.prono %></td>
+			<td><%= lePari.cote %></td>
+			<td><%= lePari.mise %></td>
+			<td><%= lePari.gain %></td>
+		</tr>
+	<% end %>
+</table>
