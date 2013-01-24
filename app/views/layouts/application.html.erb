@@ -11,7 +11,7 @@
 <body>
 	
 			<% if user_signed_in? %>
-				<p>Bienvenue : <%= current_user.username %>, vous avez <%= current_user.credit %> € - <%= link_to "Mon compte", :edit %> - <%= link_to "Mes paris", current_user.id.to_s+'/mes_paris' %> - <%= link_to "Se déconnecter", destroy_user_session_path, :method => :delete %></p>
+				<p>Bienvenue : <%= current_user.username %>, vous avez <%= current_user.credit %> € - <%= link_to "Mon compte", :edit %> - <%= link_to "Mes paris", '/'+current_user.id.to_s+'/mes_paris' %> - <%= link_to "Se déconnecter", destroy_user_session_path, :method => :delete %></p>
 			<% else %>
 				<p><%= link_to "Se connecter", new_user_session_path %></p>
 			<% end %>
@@ -19,7 +19,7 @@
 		
 			<%= yield %>
 		
-		<div id="footer">
+		<div id="footer" style="padding-top:20px;">
 			<p>Copyright 2013 - D. Beltrami - V. Eclancher - O. Revial</p>
 		</div>
 </body>

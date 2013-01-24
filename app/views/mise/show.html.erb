@@ -1,15 +1,22 @@
-<% if ((@resultatMise == -1) || (@resultatMise == 0)) %>
+<% if ((@resultatMise == -1) || (@resultatMise == 0) || (@resultatMise == -2)) %>
 	<a href="javascript:history.back()">Revenir à la page du pari</a>
+<% else %>
+	<a href="/">Tous les sports</a>
 <% end %>
 <% if @resultatMise == -1 %>
 	<h2>Votre paris n'est pas validé</h2>
 	<p>Vous n'avez pas assez d'argent sur votre compte !</p>
 <% else %>
-	<% if @resultatMise == 0 %>
+	<% if @resultatMise == -2 %>
 		<h2>Votre paris n'est pas validé</h2>
-		<p>Votre mise doit être supérieure à 0.50€ !</p>
+		<p>Votre mise doit être un nombre !</p>
 	<% else %>
-		<h2>Votre paris est validé</h2>
-		<p>Bonne chance ! Il vous reste <%= current_user.credit %>€ sur votre compte.</p>
-	<% end %>
+		<% if @resultatMise == 0 %>
+			<h2>Votre paris n'est pas validé</h2>
+			<p>Votre mise doit être supérieure à 0.50€ !</p>
+		<% else %>
+			<h2>Votre paris est validé</h2>
+			<p>Bonne chance ! Il vous reste <%= current_user.credit %>€ sur votre compte.</p>
+		<% end %>
+	<%end %>
 <% end %>

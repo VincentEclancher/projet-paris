@@ -7,8 +7,7 @@ class CreateBets < ActiveRecord::Migration
       t.string :event_name, :null => false
       t.string :sport_name, :null => false
       t.string :type_of_bet
-      t.date :start_date
-      t.time :start_time
+      t.datetime :start_date
       t.boolean :is_opened
 
       t.timestamps

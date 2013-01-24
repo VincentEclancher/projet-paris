@@ -45,16 +45,19 @@ class Parser
   end
 
   def is_parse_needed
+    puts "In parse needed method"
 
     doc = Nokogiri::XML(@body)
 
     xml_parse_date = doc.root()['file_date']
     allFileParseDates = FileParse.all
+
     if allFileParseDates    ## On compare la date stockee dans la BDD avec la date du fichier XML
         if allFileParseDates.first
             fileParse = allFileParseDates.first
             puts "File date stockee : " + fileParse.last_parse_date.to_s
             if(fileParse.last_parse_date != xml_parse_date)     ## On remplace la date et il faut parser
+                puts "On remplace la date"
                 fileParse.last_parse_date = xml_parse_date
                 fileParse.save
                 return true
@@ -63,6 +66,7 @@ class Parser
                 return false
             end
         else
+            puts "Pas de file date "
             fileParse = FileParse.new
             fileParse.last_parse_date = xml_parse_date
             fileParse.save

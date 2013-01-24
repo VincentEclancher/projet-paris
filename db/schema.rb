@@ -26,11 +26,10 @@ ActiveRecord::Schema.define(:version => 20130123230158) do
     t.string   "event_name",  :null => false
     t.string   "sport_name",  :null => false
     t.string   "type_of_bet"
-    t.date     "start_date"
-    t.time     "start_time"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-    t.boolean  "is_opened",   :default => true
+    t.datetime "start_date"
+    t.boolean  "is_opened"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "bets_users", :force => true do |t|
@@ -46,7 +45,7 @@ ActiveRecord::Schema.define(:version => 20130123230158) do
   end
 
   create_table "file_parsing", :id => false, :force => true do |t|
-    t.date     "last_parse_date", :null => false
+    t.datetime "last_parse_date", :null => false
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
