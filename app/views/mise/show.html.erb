@@ -1,5 +1,6 @@
-<a href="/paris/<%= @sportName %>">Retour à la page <%= @sportName %></a>
-
+<% if ((@resultatMise == -1) || (@resultatMise == 0)) %>
+	<a href="javascript:history.back()">Revenir à la page du pari</a>
+<% end %>
 <% if @resultatMise == -1 %>
 	<h2>Votre paris n'est pas validé</h2>
 	<p>Vous n'avez pas assez d'argent sur votre compte !</p>

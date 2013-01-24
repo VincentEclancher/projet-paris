@@ -46,6 +46,7 @@ GEM
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    fastthread (1.0.7)
     hike (1.2.1)
     httparty (0.9.0)
       multi_json (~> 1.0)
@@ -123,6 +124,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   devise
+  fastthread
   httparty
   jquery-rails
   nokogiri

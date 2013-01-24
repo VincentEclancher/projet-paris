@@ -1,6 +1,6 @@
 class CreateBetsUsers < ActiveRecord::Migration
   def up
-    create_table :bets_users, :id => false do |t|
+    create_table :bets_users do |t|
       t.integer :user_id, :null => false
       t.integer :bet_id, :null => false
 
